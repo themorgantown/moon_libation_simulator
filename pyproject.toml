@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "moontemp"
+version = "0.2.0"
+description = "Libation simulator for Moon Wobbles"
+authors = ["Daniel <50146+themorgantown@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+matplotlib = "^3.8.3"
+astropy = "^6.0.1"
+jplephem = "^2.21"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
