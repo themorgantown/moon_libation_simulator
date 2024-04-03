@@ -8,11 +8,9 @@ from astropy.coordinates import solar_system_ephemeris, get_body, EarthLocation,
 import numpy as np
 import matplotlib.pyplot as plt
 
-number_days = 33
+number_days = 5
 
-# Ensure astropy.units is correctly imported and used
-
-# the last big eclipse, why not
+# start on the last big eclipse, why not
 initial_time = Time('2017-08-21 07:25:00', scale='utc')
 end_time = initial_time + number_days * u.day
 delta_time = 1 * u.hour
@@ -57,13 +55,13 @@ with solar_system_ephemeris.set('jpl'):
         distance_to_earth = np.sqrt(x**2 + y**2 + z**2)
         
         # Check if the laser intersects the Earth
-        if distance_to_earth <= 1:  # Assuming the Earth's radius is 1 unit
-            # Calculate the color based on the hour
-            hour_index = int((t - initial_time) / delta_time)
-            color = plt.cm.hsv(hour_index / len(times))  # Use the hsv colormap to get a full spectrum of colors
-            ax.scatter(x, y, z, color=color, s=10)  # Plot each point where the laser intersects Earth
+        #if distance_to_earth <= 1:  # Assuming the Earth's radius is 1 unit
+        # Calculate the color based on the hour
+        hour_index = int((t - initial_time) / delta_time)
+        # color = plt.cm.hsv(hour_index / len(times))  # Use the 
+        ax.scatter(x, y, z, color=(1 - hour_index / len(times), 0, 0), s=5)  # Plot each point where the laser intersects Earth
 
-ax.set_title("Laser's Path over 7 Days")
+ax.set_title("Laser's Path over 14 Days")
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
