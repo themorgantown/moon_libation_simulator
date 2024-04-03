@@ -1,20 +1,19 @@
 from astropy import units as u
-from astropy.coordinates import EarthLocation, get_body, SkyCoord, AltAz, GCRS
+from astropy.coordinates import EarthLocation, get_body, AltAz, solar_system_ephemeris
 from astropy.time import Time
 import numpy as np
-
 import matplotlib.pyplot as plt
 
-from astropy.coordinates import solar_system_ephemeris
+# Use JPL ephemerides for accurate positions, including lunar libration
 solar_system_ephemeris.set('jpl')
 
 # Observation time and location on Earth
-observation_time = Time('2024-04-04T00:00:00')
+observation_time = Time('2020-04-04T00:00:00')
 earth_location = EarthLocation(lat=41.2033*u.deg, lon=-74.0924*u.deg, height=0*u.m)
 
-# Generate times spanning 24 hours
-num_steps = 3650
-time_span = 8760 * u.hour  # Total duration in hours
+# Generate times spanning one year with 10 observations per day
+num_steps = 365
+time_span = 500 * u.day  # Total duration in days
 times = observation_time + np.linspace(0, 1, num_steps) * time_span
 
 # Initialize lists to store coordinates and colors
@@ -33,7 +32,7 @@ for i, t in enumerate(times):
     # Assuming the laser points directly from the Moon to the observer's location
     # We simulate the Earth's rotation by considering the observer's position at different times
     lat = earth_location.lat.deg
-    lon = (earth_location.lon.deg + (t - observation_time).to(u.hour).value * 15) % 360  # Earth rotates 15 deg/hr
+    lon = (earth_location.lon.deg + (t - observation_time).to(u.hour).value * 15) % 360
     
     latitudes.append(lat)
     longitudes.append(lon)
@@ -51,7 +50,7 @@ colors = np.array(colors)
 fig = plt.figure(figsize=(10, 5))
 ax = fig.add_subplot(111, projection='mollweide')
 ax.scatter(np.radians(longitudes) - np.pi, np.radians(latitudes), color=colors, marker='o', s=10)  # Adjust point size and color
-ax.set_title("Path Traced by Laser on Earth Over One Day")
+ax.set_title("Path Traced by Laser on Earth Over One year")
 ax.set_xlabel("Longitude")
 ax.set_ylabel("Latitude")
 ax.grid(True)
